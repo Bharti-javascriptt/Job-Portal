@@ -16,10 +16,10 @@ export const getAlljob=async(req,res)=>{
 //!!!! created job by employer 
 // export const createJobController= async (req,res,next)=>{
 
-//     const {role}=req.user;
-//     if(role==='Job seeker'){
-//         return next("Job seeker is not allowed to access this page ")
-//     }
+    // const {role}=req.user;
+    // if(role==='Job seeker'){
+    //     return next("Job seeker is not allowed to access this page ")
+    // }
 
 //     const { position, description, city,}=req.body
 //     if( !position || !description ||!city ){
@@ -290,13 +290,13 @@ export const getsinglejob = async (req, res, next) => {
 
 
   export const createJobController = async (req, res, next) => {
-    // const role  = req.user;
-    // console.log(role);
-    // if (role === "Job Seeker") {
-    //   return next(
-    //     "Job Seeker not allowed to access this resource."
-    //   );
-    // }
+    const role  = req.user;
+    console.log(role);
+    if (role === "Job Seeker") {
+      return next(
+        "Job Seeker not allowed to access this resource."
+      );
+    }
     const {
       position,
       description,
