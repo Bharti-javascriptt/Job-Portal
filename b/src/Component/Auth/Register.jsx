@@ -56,7 +56,7 @@ const Register = () => {
     <section className="authPage">
       <div className="container">
         <div className="header">
-          <img src="/JobZeelogo.png" alt="logo" />
+          <img src="/img/logo.jpg" alt="logo" />
           <h3>Create a new account</h3>
         </div>
         <form onSubmit={handleRegister}>
@@ -121,7 +121,7 @@ const Register = () => {
         </form>
       </div>
       <div className="banner">
-        {/* <img src="/register.png" alt="register" /> */}
+        <img src="/img/banner2.jpg"  alt="register" />
       </div>
     </section>
   );

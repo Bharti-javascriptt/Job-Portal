@@ -9,30 +9,29 @@ const HowItWorks = () => {
     <>
       <div className="howitworks">
         <div className="container">
-          <h3>How JobZee Works</h3>
+          <h3>How JobPortal  Works</h3>
           <div className="banner">
             <div className="card">
               <FaUserPlus />
               <p>Create Account</p>
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Consequuntur, culpa.
+              Create a Job: Log in as an employer, navigate to the "Create Job" section, and fill out the job details, including title, description, requirements, and location.
+
+
               </p>
             </div>
             <div className="card">
               <MdFindInPage />
               <p>Find a Job/Post a Job</p>
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Consequuntur, culpa.
+              Post the Job: After reviewing the job details, click "Post Job" to make the listing live on the portal, where job seekers can view and apply.
               </p>
             </div>
             <div className="card">
               <IoMdSend />
-              <p>Apply For Job/Recruit Suitable Candidates</p>
+              <p>Manage Applications</p>
               <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Consequuntur, culpa.
+              Manage Applications: Once the job is posted, you can monitor applications, communicate with candidates, and manage the hiring process through your employer dashboard.
               </p>
             </div>
           </div>

@@ -7,9 +7,10 @@
   box-sizing: border-box;
   overflow-x: hidden;
   font-family: "Roboto", sans-serif;
-  /* background-image: url("../1.jpg"); */
+  
   /* z-index: -999; */
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
@@ -74,14 +75,34 @@ p {
     font-size: 1.15rem;
   }
 }
-
 .authPage {
   display: flex;
   min-width: 1500px;
   max-width: 1500px;
-  margin: 0 auto;
+  width: 1200px;
+  margin:auto;
+  background-image: url('../public/img/banner.gif');
   min-height: 100vh;
+  border: 8px solid rgba(10, 8, 8, 0.835);
+
 }
+.banner img{
+
+  position: relative;
+  top:-57px;
+  height:50vh
+}
+
+ /* .authPage {
+  display: flex;
+  min-width: 1500px;
+  max-width: 1500px;
+  width: 1200px;
+  margin:auto;
+  background-image: url('../public/img/banner.gif');
+  min-height: 100vh;
+
+} */
 .authPage .container {
   flex: 1;
   display: flex;

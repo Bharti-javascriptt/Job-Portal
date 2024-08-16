@@ -14,7 +14,7 @@ router.post ('/post', auth, createJobController)
 router.get ('/getall', getAlljob  )
 
 router.get('/get-job',auth, getAllJobsController)
-router.patch('/update-job/:id', auth, updateJobcontroller)
+router.patch('/update/:id', auth, updateJobcontroller)
 // 
 router.delete('/delete-job/:id', auth, deleteJobController)
 router.get('/job-stats', auth, jobsStatsController)

@@ -36,13 +36,18 @@ const HeroSection = () => {
             <h1>Find a job that suits</h1>
             <h1>your interests and skills</h1>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem
-              voluptate repellat modi quidem aliquid eaque ducimus ipsa et,
-              facere mollitia!
+            
+            For Employers:Use the portal to post jobs, track applications, and communicate with candidates in real-time.
+
+For Job Seekers: Find tailored job opportunities, follow clear application steps, and track your application status.
+
+Key Features: Secure logins, personalized dashboards, and advanced search filters for an efficient job search experience.
+
+
             </p>
           </div>
           <div className="image">
-            <img src="/img/1.jpg" alt="hero" />
+            <img src="/img/banner1.jpg" alt="hero" />
           </div>
         </div>
         <div className="details">

@@ -108,62 +108,86 @@ export const getAllJobsController=async( req, res, next)=>{
 }
 
 // ???????????????????????? update job 
-export const updateJobcontroller=async(req,res,next)=>{
 
-    const {role}=req.user;
-    if(role==='Job seeker'){
-        return next("Job seeker is not allowed to access this page ")
+export const updateJobcontroller =async (req, res, next) => {
+    const { role } = req.user;
+    if (role === "Job Seeker") {
+      return next(
+        "Job Seeker not allowed to access this resource."
+      );
     }
-
-    const {id}=req.params
-    // const {company, position}=req.body
-
-    //>validation
-    // if(!company||!position){
-        // next('please provide all field ')
-    // }
-    const job =await jobsModel.findOne({_id:id})
-    if(!job){
-        next(`no job found id ${id}`)
+    const { id } = req.params;
+    let job = await jobsModel.findById(id);
+    if (!job) {
+      return next("OOPS! Job not found.");
     }
-    if(!req.user.userID===job.createdBy){
-    
-        next('you are not  authorized to update')
-        return;
-    
-        
-    }
-    const updateJob=await jobsModel.findOneAndUpdate({_id:id}, req.body,{
-        new:true,
-        runValidators:true
+    job = await jobsModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
     });
-    res.status(200).json({success:true, message:"job updated"});
-}
-
-
+    res.status(200).json({
+      success: true,
+      message: "job updated successfully",
+      job,
+    });
+  };
+  
 //!!!!!!!!!!!!!!!!!!!!!!!!
 
-export  const deleteJobController=async( req,res,next)=>{
+// export  const deleteJobController=async( req,res,next)=>{
 
-    const {role}=req.user;
-    if(role==='Job seeker'){
-        return next("Job seeker is not allowed to access this page ")
+//     const {role}=req.user;
+//     if(role==='Job seeker'){
+//         return next("Job seeker is not allowed to access this page ")
+//     }
+
+//     const {id}=req.params
+//     const job=await jobsModel.findOne({_id:id})
+//     if(!job){
+//         next(`no job  found wiht  this id ${id}`)
+//     }
+//     if(!req.user.userID===job.createdBy){
+//         next(`you are not authorize to delte `)
+//         return;
+
+//     }
+//     await job.deleteOne( );
+//     res.status(200).json({message:'success , job deleted'})
+
+// }
+// import jobsModel from '../models/jobsModel'; // Adjust the import path as necessary
+
+export const deleteJobController = async (req, res, next) => {
+    try {
+        const { role, userID } = req.user; // Extract user info from token
+
+        // Check user role
+        if (role === 'Job seeker') {
+            return res.status(403).json({ message: 'Job seekers are not allowed to delete jobs.' });
+        }
+
+        const { id } = req.params;
+        const job = await jobsModel.findById(id);
+
+        // Check if job exists
+        if (!job) {
+            return res.status(404).json({ message: `No job found with ID ${id}` });
+        }
+
+        // Check if the user is authorized to delete the job
+        if (userID !== job.createdBy.toString()) {
+            return res.status(401).json({ message: 'You are not authorized to delete this job.' });
+        }
+
+        // Delete the job
+        await job.deleteOne();
+        res.status(200).json({ message: 'Job deleted successfully.' });
+    } catch (error) {
+        console.error('Error in deleteJobController:', error); // Log error details
+        res.status(500).json({ message: 'An error occurred while deleting the job.' });
     }
-
-    const {id}=req.params
-    const job=await jobsModel.findOne({_id:id})
-    if(!job){
-        next(`no job  found wiht  this id ${id}`)
-    }
-    if(!req.user.userID===job.createdBy){
-        next(`you are not authorize to delte `)
-        return;
-
-    }
-    await job.deleteOne( );
-    res.status(200).json({message:'success , job deleted'})
-
-}
+};
 
 
 ///!!!!!!!!!!!!!!Filter 

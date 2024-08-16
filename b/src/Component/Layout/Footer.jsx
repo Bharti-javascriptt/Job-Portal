@@ -17,7 +17,7 @@ const Footer = () => {
       {/* <Link to={"/"} target="_blank"><FaFacebookF/></Link> */}
       {/* <Link to={"/"} target="_blank"><FaYoutube/></Link> */}
       {/* <Link to={"/"} target="_blank"><FaLinkdin/></Link> */}
-      <Link to={"/"} target="_blank">dfdsfas</Link>
+      <Link to={"/"} target="_blank"></Link>
 
     </div>
 </footer>)}

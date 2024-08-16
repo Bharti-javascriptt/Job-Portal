@@ -6,22 +6,22 @@
     const companies = [
       {
         id: 1,
-        title: "Microsoft",
-        location: "Street 10 Karachi, Pakistan",
+        title: "Tesla",
+        location: "Brigade Gateway, 26/1, Dr. Rajkumar Road Bengaluru, Karnataka, 560055, India",
         openPositions: 10,
         icon: <FaMicrosoft />,
       },
       {
         id: 2,
-        title: "Tesla",
-        location: "Street 10 Karachi, Pakistan",
+        title: "MicrosofMicrosoft India (R&D) Pvt. Ltd.",
+        location: "Microsoft Campus,Gachibowli,Hyderabad, Telangana, 500032 India",
         openPositions: 5,
         icon: <SiTesla />,
       },
       {
         id: 3,
-        title: "Apple",
-        location: "Street 10 Karachi, Pakistan",
+        title: "Apple India Private Limited",
+        location: "19th Floor, Concorde Tower C,UB City, 24, Vittal Mallya Road,Bengaluru, Karnataka, 560001, India",
         openPositions: 20,
         icon: <FaApple />,
       },
