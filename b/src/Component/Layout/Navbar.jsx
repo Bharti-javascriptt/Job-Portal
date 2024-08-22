@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../../index.js";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,10 +10,6 @@ const Navbar = () => {
   const { isAuthorized, setIsAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
 
-  useEffect(() => {
-    console.log("User:", user); // Debugging: Check user object
-  }, [user]);
-
   const handleLogout = async () => {
     try {
       const response = await axios.get(
@@ -23,6 +19,13 @@ const Navbar = () => {
         }
       );
       toast.success(response.data.message);
+
+      // Clear local storage
+      localStorage.clear();
+
+      // Clear all cookies
+      clearAllCookies();
+
       setIsAuthorized(false);
       navigateTo("/login");
     } catch (error) {
@@ -31,11 +34,21 @@ const Navbar = () => {
     }
   };
 
+  // Function to clear all cookies
+  const clearAllCookies = () => {
+    const cookies = document.cookie.split(";");
+
+    cookies.forEach(cookie => {
+      const name = cookie.split("=")[0].trim();
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+    });
+  };
+
   return (
     <nav className={isAuthorized ? "navbarShow" : "navbarHide"}>
       <div className="container">
         <div className="logo">
-          <img src="/img/1.jpg" alt="logo" />
+          <img src="/img/logo.jpg" alt="logo" />
         </div>
         <ul className={!show ? "menu" : "show-menu menu"}>
           <li>
@@ -49,13 +62,13 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to={"/applications/me"} onClick={() => setShow(false)}>
-              {user && user.role === "Employer"
+            <Link to={"/application/me"} onClick={() => setShow(false)}>
+              {user === "Employer"
                 ? "APPLICANT'S APPLICATIONS"
                 : "MY APPLICATIONS"}
             </Link>
           </li>
-          {user && user.role === "Employer" && (
+          {user === "Employer" ? (
             <>
               <li>
                 <Link to={"/job/post"} onClick={() => setShow(false)}>
@@ -68,7 +81,10 @@ const Navbar = () => {
                 </Link>
               </li>
             </>
+          ) : (
+            <></>
           )}
+
           <button onClick={handleLogout}>LOGOUT</button>
         </ul>
         <div className="hamburger">

@@ -15,8 +15,8 @@ import auth from '../middleware/auth.js';
 //    });
 // const uploadFile = multer({stoarge:storage}).single('image');
 
-router.get('/jobseeker/getAll',auth, jobseekergetAllApplication )
-router.get ("/employer/get-job",auth, employergetAllApplication)
+router.get('/jobseeker/getall',auth, jobseekergetAllApplication )
+router.get ("/employer/getall",auth, employergetAllApplication)
 router.delete('/delete/:id',auth, jobseekerDeleteApplication)
 router.post('/post',auth, postApplication)
 

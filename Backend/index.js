@@ -91,7 +91,7 @@ import applicationroute from './routes/applicationroute.js'
 app.use('/api/v1/reg', registerroutes)  // this is for registration login logout 
 app.use('/api/v1/user', user_admin)
 app.use('/api/v1/job', jobsroute); // job  
-app.use("/api/v1/appl",applicationroute);
+app.use("/api/v1/application",applicationroute);
 
 
 

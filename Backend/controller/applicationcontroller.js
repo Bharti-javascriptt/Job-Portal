@@ -12,10 +12,10 @@ export const employergetAllApplication=async(req,res,next)=>{
         return next("Job seeker is not allowed to access this page ")
     }
     const {_id}=req.user;
-    const application= await jobseekerModel.find({'employerID.user':_id});
+    const applications= await jobseekerModel.find({'employerID.user':_id});
     res.status(200).json({
         success:true,
-        application
+        applications
     })
     };
 
@@ -28,10 +28,10 @@ export const jobseekergetAllApplication=async(req,res,next)=>{
         return next("Job seeker is not allowed to access this page ")
     }
     const {_id}=req.user;
-    const application= await jobseekerModel.find({'applicantID.user':_id});
+    const applications= await jobseekerModel.find({'applicantID.user':_id});
     res.status(200).json({
         success:true,
-        application
+        applications
     })
 };
 

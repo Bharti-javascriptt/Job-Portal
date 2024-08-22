@@ -14,7 +14,7 @@ const MyJobs = () => {
 
   // Fetching all jobs
   useEffect(() => {
-    if (!isAuthorized || (user && user.role !== "Employer")) {
+    if (!isAuthorized) {
       navigateTo("/");
       return;
     }

@@ -86,6 +86,26 @@ p {
   border: 8px solid rgba(10, 8, 8, 0.835);
 
 }
+/* Ensure that `navbarShow` is actually making the navbar visible */
+.navbarShow {
+  display: block;
+}
+
+/* Ensure that `navbarHide` is actually hiding the navbar */
+.navbarHide {
+  display: none;
+}
+
+/* Ensure that `show-menu` correctly shows the menu */
+.show-menu {
+  display: block;
+}
+
+/* Ensure that `menu` hides the menu when needed */
+.menu {
+  display: none;
+}
+
 .banner img{
 
   position: relative;
@@ -259,6 +279,13 @@ p {
 }
 .navbarHide {
   display: none;
+}
+.card{
+  background-color: palegreen;
+}
+.card p{
+  margin-top: -10px;
+  margin-bottom: 0px;
 }
 
 .heroSection {

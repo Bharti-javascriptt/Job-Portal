@@ -1,33 +1,57 @@
-import React, { createContext, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import React, { createContext, useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.js";
+import toast from "react-hot-toast";
 
 export const Context = createContext({
   isAuthorized: false,
   setIsAuthorized: () => {},
-  user: null,
+  user: {},
   setUser: () => {},
 });
 
 const AppWrapper = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
+  
 
   useEffect(() => {
-    console.log("AppWrapper user:", user); // Debugging: Check if user is being set correctly
-  }, [user]);
+    const initializeAuthState = () => {
+      const storedUser = localStorage.getItem("user");
+      console.log(storedUser)
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          const token = parsedUser.token;
+          console.log(token)
+          console.log(parsedUser)
+          console.log(parsedUser.user)
+          console.log(parsedUser.user.role)
 
-  // Example of setting user (for demonstration)
-  useEffect(() => {
-    // Example: Fetch user data and set it
-    // This should be replaced with real logic, such as fetching from an API
-    const fetchedUser = {
-      name: "John Doe",
-      role: "Employer", // or "Employee"
+          if (token) {
+            setIsAuthorized(true);
+            // settoken(parsedUser.token)
+            setUser(parsedUser.user.role); // Ensure we're setting the user object correctly
+            console.log("AppWrapper - User data set:", parsedUser.user); // Debugging line
+            // console.log(user);
+          } else {
+            throw new Error("Token is missing");
+          }
+        } catch (error) {
+          toast.error("Failed to parse user data. Please login again.");
+          console.error("Error initializing auth state:", error);
+          setIsAuthorized(false);
+          setUser({});
+        }
+      } else {
+        setIsAuthorized(false);
+        setUser({});
+      }
     };
-    setUser(fetchedUser);
-    setIsAuthorized(true);
-  }, []);
+
+    initializeAuthState();
+    // console.log(user)
+  },);
 
   return (
     <Context.Provider
@@ -43,7 +67,7 @@ const AppWrapper = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AppWrapper />
   </React.StrictMode>

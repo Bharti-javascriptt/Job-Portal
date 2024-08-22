@@ -13,7 +13,7 @@ import Home from "./Component/Home/Home";
 import Jobs from "./Component/Job/Jobs";
 import JobDetail from "./Component/Job/JobDetail";
 import Application from "./Component/Application/Application";
-import MyApplications from "./Component/Application/MyApplication";
+import MyApplication from "./Component/Application/MyApplication";
 import PostJob from "./Component/Job/PostJob";
 import NotFound from "./Component/NotFound/NotFound";
 import MyJobs from "./Component/Job/MyJob";
@@ -43,16 +43,16 @@ const App = () => {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/login" element={<Login/>} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/job/getall" element={<Jobs />} />
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>} />
+          <Route path="/" element={<Home/>} />
+          <Route path="/job/getall" element={<Jobs/>} />
           <Route path="/job/:id" element={<JobDetail/>} />
-          <Route path="/application/:id" element={<Application />} />
-          <Route path="/applications/me" element={<MyApplications />} />
-          <Route path="/job/post" element={<PostJob />} />
-          <Route path="/job/me" element={<MyJobs />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/application/:id" element={<Application/>} />
+          <Route path="/application/me" element={<MyApplication/>} />
+          <Route path="/job/post" element={<PostJob/>} />
+          <Route path="/job/me" element={<MyJobs/>} />
+          <Route path="*" element={<NotFound/>} />
         </Routes>
         <Footer />
         <Toaster />
