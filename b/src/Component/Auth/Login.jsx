@@ -12,7 +12,8 @@
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
-    const { isAuthorized, setIsAuthorized } = useContext(Context);
+    const { isAuthorized, setIsAuthorized ,setUser} = useContext(Context);
+    console.log(isAuthorized)
 
     const handleLogin = async (e) => {
       e.preventDefault();
@@ -21,20 +22,25 @@
           "http://localhost:8000/api/v1/reg/login",
           { email, password, role },
           {
+            withCredentials: true,
+
             headers: {
               "Content-Type": "application/json",
             },
-            withCredentials: true,
           }
         );
     
         console.log("Login response:", data); // Log the response
-        localStorage.setItem("user", JSON.stringify(data));
+        
         toast.success(data.message);
         setEmail("");
         setPassword("");
         setRole("");
         setIsAuthorized(true);
+        setUser(data) //yaha per user variable meekobjectstore hoga user.user.role user.token
+        console.log(data.token)
+        
+        console.log(data)
       } catch (error) {
         console.error("Login error:", error); // Log the full error
         const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";

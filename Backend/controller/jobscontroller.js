@@ -13,27 +13,6 @@ export const getAlljob=async(req,res)=>{
    
 };
 
-//!!!! created job by employer 
-// export const createJobController= async (req,res,next)=>{
-
-    // const {role}=req.user;
-    // if(role==='Job seeker'){
-    //     return next("Job seeker is not allowed to access this page ")
-    // }
-
-//     const { position, description, city,}=req.body
-//     if( !position || !description ||!city ){
-//         next('please provide all field ')
-//     }
-//     if((!salaryFrom|| !salaryTo)&& !fixedSalary){
-//         next('please provide either fixed Salary or  range salary ')
-//     }
-   
-//     req.body.createdBy=req.user.userID
-//     const job=await jobsModel.create(req.body)
-//     res.status(201).json({job});
-
-// }
 
 
 
@@ -107,7 +86,7 @@ export const getAllJobsController=async( req, res, next)=>{
      })
 }
 
-// ???????????????????????? update job 
+// ????? update job ------------------------------
 
 export const updateJobcontroller =async (req, res, next) => {
     const { role } = req.user;
@@ -121,6 +100,7 @@ export const updateJobcontroller =async (req, res, next) => {
     if (!job) {
       return next("OOPS! Job not found.");
     }
+    console.log(job)
     job = await jobsModel.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
@@ -135,28 +115,6 @@ export const updateJobcontroller =async (req, res, next) => {
   
 //!!!!!!!!!!!!!!!!!!!!!!!!
 
-// export  const deleteJobController=async( req,res,next)=>{
-
-//     const {role}=req.user;
-//     if(role==='Job seeker'){
-//         return next("Job seeker is not allowed to access this page ")
-//     }
-
-//     const {id}=req.params
-//     const job=await jobsModel.findOne({_id:id})
-//     if(!job){
-//         next(`no job  found wiht  this id ${id}`)
-//     }
-//     if(!req.user.userID===job.createdBy){
-//         next(`you are not authorize to delte `)
-//         return;
-
-//     }
-//     await job.deleteOne( );
-//     res.status(200).json({message:'success , job deleted'})
-
-// }
-// import jobsModel from '../models/jobsModel'; // Adjust the import path as necessary
 
 export const deleteJobController = async (req, res, next) => {
     try {
@@ -252,44 +210,6 @@ export const jobsStatsController=async (req,res)=>{
 } 
 
 
-// export const getsinglejob = async (req, res, next) => {
-//     const id = req.params.id;
-
-//     try {
-//     const job = await jobsModel.findById(id);
-//     return res.status(200).json({
-//                 success: true,
-//                 job
-//             });
-//         } 
-//     catch (err) {
-//        if (err.name === 'CastError') {
-//             return res.status(400).json({
-//                 success: false,
-//                 message: "Invalid ID format"
-//             });
-//         }
-
-//         return next(err);
-//     }
-// };
-
-// export const getsinglejob =async (req, res, next) => {
-//     const { id } = req.params;
-//     try {
-//       const job = await jobsModel.findById(id);
-//       if (!job) {
-//         return next("Job not found.");
-//       }
-//       res.status(200).json({
-//         success: true,
-//         job,
-//       });
-//     } catch (error) {
-//       return next(`Invalid ID / CastError`);
-//     }
-//   };
-
 export const getsinglejob = async (req, res, next) => {
     
     const { id } = req.params;
@@ -313,12 +233,18 @@ export const getsinglejob = async (req, res, next) => {
   
 
 
+
+
+// !!!!!!Post job---------------------------------
+
   export const createJobController = async (req, res, next) => {
-    const role  = req.user;
+    // !!2 method destructue user role from req.user req.user comes from auth it store whole user
+    const {role}  = req.user;    /*destructure firstway*/
+    // const role=req.user.role;  destrueture second way 
     console.log(role);
     if (role === "Job Seeker") {
       return next(
-        "Job Seeker not allowed to access this resource."
+        "Job Seeker  is not allowed to access this resource."
       );
     }
     const {
@@ -339,8 +265,7 @@ export const getsinglejob = async (req, res, next) => {
   
     if ((!salaryFrom || !salaryTo) && !fixedSalary) {
       return next(
-        
-          "Please either provide fixed salary or ranged salary.",
+       "Please either provide fixed salary or ranged salary.",
               );
     }
   
@@ -349,7 +274,7 @@ export const getsinglejob = async (req, res, next) => {
         "Cannot Enter Fixed and Ranged Salary together."
       );
     }
-    const createdBy = req.user.userID;
+    const createdBy = req.user._id;
     console.log(` Employer id who post job id ${createdBy}`)
 
     const job = await jobsModel.insertMany({
@@ -372,14 +297,24 @@ export const getsinglejob = async (req, res, next) => {
   };
 
 
-//   export const createJobController = async (req, res, next) => {
-//     const { company, position } = req.body;
-//     if (!company || !position) {
-//       next("Please Provide All Fields");
-//     }
-//     req.body.createdBy = req.user.userID;
-//     console.log(` Employer id who post job id ${req.body.createdBy}`)
-//     const job = await jobsModel.create(req.body);
-//     res.status(201).json({ job });
-//   };
+
+   
+
+// !!!employer get all our job 
+
+
+
+export const getmyjob = async (req, res, next) => {
+    
+  const { role } = req.user;
+  if (role==="Job seeker"){
+    return next('job seeker not allowed to access this resource')
+  }
   
+    const myjob= await jobsModel.find({createdBy:req.user._id});
+    
+    res.status(200).json({
+      success: true,
+      myjob,
+    });
+  }

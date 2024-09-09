@@ -24,7 +24,7 @@
       next('provide the role ')
    }
 
-   //  find the email of extiiting user if the user is already register then provide message of login 
+   
    const existinguser=await userModel.findOne({email})
    if(existinguser){
    next("already register please login");
@@ -36,6 +36,8 @@
    //!!if all the condition are false then save the register detail 
 
    const user =await userModel.create({name,email,password, role, })
+
+   // ?? create jwt token and save in user model 
    const token=user.createJWT()
    const options={
       expires:new Date(
@@ -45,20 +47,14 @@
    };
 
    // const token= sendToken()
-   res.status(201).cookie("token", token, options).send({
+   res.status(201)
+   .cookie("token", user, options)
+   .send({
       success:true,
       message:'User registered  successfully',
       user,
       token,
-      
-      //  user:{
-      //    email:user.email,
-      //    name:user.name,
-      //    lastName:user.lastName,
-      //    location:user.location,
-      //    role:user.role
-      //  },
-      //  token,
+   
    })
       }
       catch(err){
@@ -76,7 +72,7 @@
 
 
 
-      //!!!!!!!!Login credintial 
+      //!!Login credintial 
 
 
       const loginController = async(req,res,next)=>{
@@ -113,7 +109,8 @@
                httpOnly:true,
          };
 
-            res.status(200).cookie("token", token, options).json({
+            res.status(200).cookie("token",token,options)
+            .json({
             success:true,
             message:'Login Successfully',
             user,
@@ -129,7 +126,13 @@
 
    export {loginController};
 
+   // !! logout---------------------
+   
+
    export const logoutController = async(req,res,next)=>{
+      // const token = req.cookies.Cookies;
+      // console.log(token)
+
          res.status(201).cookie("token", " ", {
             httpOnly:true,
             expire:new Date(Date.now),
@@ -141,9 +144,15 @@
       
    }
 
-
-
-   export const getUser=async(req,res,next)=>{
-      const user=req.user;
-      res.status(200).json({success:true,user});
+   export const getUser= async(req,res,next)=>{
+     const user= req.user;
+     res.status(200)
+     .json({
+      success:true,
+      user,
+     });
    };
+
+
+
+   

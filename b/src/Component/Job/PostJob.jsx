@@ -16,7 +16,7 @@ const PostJob = () => {
   const [fixedSalary, setFixedSalary] = useState("");
   const [salaryType, setSalaryType] = useState("default");
 
-  const { isAuthorized,setIsAuthorized, user } = useContext(Context);
+  const { isAuthorized,setIsAuthorized } = useContext(Context);
 
   const handleJobPost = async (e) => {
     e.preventDefault();
@@ -95,7 +95,7 @@ const PostJob = () => {
 };
 
   const navigateTo = useNavigate();
-  if (!isAuthorized || (user && user.role !== "Employer")) {
+  if (!isAuthorized) {
     navigateTo("/");
   }
 

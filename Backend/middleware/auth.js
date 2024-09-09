@@ -1,13 +1,16 @@
 import JWT from 'jsonwebtoken';
+import userModel from '../models/userModel.js';
 
 const auth = async (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    // const authHeader = req.headers.authorization;
+    const token= req.cookies.token; // Or wherever your token is stored
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Authorization header missing or incorrect format' });
-    }
 
-    const token = authHeader.split(' ')[1];
+    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //     return res.status(401).json({ error: 'Authorization header missing or incorrect format' });
+    // }
+
+    // const token = authHeader.split(' ')[1];
 
     if (!token) {
 
@@ -18,12 +21,18 @@ const auth = async (req, res, next) => {
     try {
         const payload = JWT.verify(token, process.env.JWT_SECRET);
         console.log(payload)
-        req.user = { userID: payload.userID };
-        // console.log("someting is going to be wrong here is authentication error check it ");
+        // req.user = { userID: payload.userID };user
+        // !! yaha userId islyea ayega kuki user model me jwt token create sign kyia 
+        // !! tab waha par humne user id ko userID variable me store kyia hai 
+        req.user=await userModel.findById(payload.userID)
+        console.log(`whole user console  ${req.user}`)
+        
         console.log(payload.userID);
+        
         const userID=payload.userID;
         console.log(userID)
-        // console.log(`this is user id ${user}`);
+
+        
         next();
     } catch (error) {
         console.error('Token verification failed:', error.message);
@@ -32,3 +41,7 @@ const auth = async (req, res, next) => {
 };
 
 export default auth;
+
+
+
+

@@ -9,39 +9,25 @@ const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthorized, setIsAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
+  console.log(isAuthorized)
+  console.log(`authorized value:: ${isAuthorized}`)
 
   const handleLogout = async () => {
     try {
       const response = await axios.get(
         "http://localhost:8000/api/v1/reg/logout",
-        {
-          withCredentials: true,
-        }
+        {  
+        withCredentials: true  // अगर आपको कुकीज़ भी भेजनी हैं
+      }
       );
       toast.success(response.data.message);
-
-      // Clear local storage
-      localStorage.clear();
-
-      // Clear all cookies
-      clearAllCookies();
-
       setIsAuthorized(false);
       navigateTo("/login");
+    
     } catch (error) {
       toast.error(error.response.data.message);
       setIsAuthorized(true);
     }
-  };
-
-  // Function to clear all cookies
-  const clearAllCookies = () => {
-    const cookies = document.cookie.split(";");
-
-    cookies.forEach(cookie => {
-      const name = cookie.split("=")[0].trim();
-      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-    });
   };
 
   return (
@@ -53,7 +39,7 @@ const Navbar = () => {
         <ul className={!show ? "menu" : "show-menu menu"}>
           <li>
             <Link to={"/"} onClick={() => setShow(false)}>
-              HOME
+              HOME 
             </Link>
           </li>
           <li>
@@ -63,12 +49,12 @@ const Navbar = () => {
           </li>
           <li>
             <Link to={"/application/me"} onClick={() => setShow(false)}>
-              {user === "Employer"
+              {user.user === "Employer"
                 ? "APPLICANT'S APPLICATIONS"
                 : "MY APPLICATIONS"}
             </Link>
           </li>
-          {user === "Employer" ? (
+          {user.user === "Employer" ? (
             <>
               <li>
                 <Link to={"/job/post"} onClick={() => setShow(false)}>

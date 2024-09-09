@@ -16,27 +16,33 @@ import Application from "./Component/Application/Application";
 import MyApplication from "./Component/Application/MyApplication";
 import PostJob from "./Component/Job/PostJob";
 import NotFound from "./Component/NotFound/NotFound";
-import MyJobs from "./Component/Job/MyJob";
-
+import MyJob from "./Component/Job/MyJob";
 const App = () => {
-  const {  setIsAuthorized, setUser } = useContext(Context);
+  const { setIsAuthorized, setUser,user, } = useContext(Context);
+  
+  console.log(user.token)
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
           "http://localhost:8000/api/v1/reg/getuser",
-          {
-            withCredentials: true,
-          }
+          {  headers: {
+            Authorization: `Bearer ${user.token}`,  // 'Bearer' स्कीम के साथ टोकन भेजना
+          },
+          withCredentials: true  // अगर आपको कुकीज़ भी भेजनी हैं
+        }
         );
-        setUser(response.data.user);
+        console.log("kkjhjk")
+
+        setUser(response.data);
         setIsAuthorized(true);
       } catch (error) {
         setIsAuthorized(false);
       }
     };
     fetchUser();
-  }, [setIsAuthorized,setUser]);
+  },[]);
 
   return (
     <>
@@ -51,7 +57,7 @@ const App = () => {
           <Route path="/application/:id" element={<Application/>} />
           <Route path="/application/me" element={<MyApplication/>} />
           <Route path="/job/post" element={<PostJob/>} />
-          <Route path="/job/me" element={<MyJobs/>} />
+          <Route path="/job/me" element={<MyJob/>} />
           <Route path="*" element={<NotFound/>} />
         </Routes>
         <Footer />

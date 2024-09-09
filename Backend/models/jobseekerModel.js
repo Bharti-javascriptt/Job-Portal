@@ -16,7 +16,7 @@ const applicationSchema= new mongoose.Schema({
         type:String,
         required:[true,"please provide your cover  letter "]
     },
-    phone:{
+    phone:{ 
         type: Number,
         required:true,
 
@@ -27,14 +27,11 @@ const applicationSchema= new mongoose.Schema({
     },
     resume:
     {
-        public_id:{
-            type:String,
-            
-        },
-    
+        img_pdf_name:{
+        type:String,},
     url:{
-        type:String,
-    },},
+        type:String,},
+    },
     applicantID:{
         user:{
             type:mongoose.Schema.Types.ObjectId,

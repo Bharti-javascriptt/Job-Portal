@@ -16,26 +16,27 @@ const MyApplication = () => {
     const fetchApplications = async () => {
       const storedUser = localStorage.getItem("user");
       const token = storedUser ? JSON.parse(storedUser).token : null;
-
+  
       if (!token) {
         toast.error("No token found. Please login again.");
         navigateTo("/login");
         return;
       }
-
+  
       try {
         const url = user === "Employer"
           ? `http://localhost:8000/api/v1/application/employer/getall?_=${new Date().getTime()}`
           : `http://localhost:8000/api/v1/application/jobseeker/getall?_=${new Date().getTime()}`;
-
+  
         const response = await axios.get(url, {
           withCredentials: true,
           headers: {
-            Authorization: `Bearer ${token}`,
+            authorization: `Bearer ${token}`,
           },
         });
-
-        setApplications(response.data.applications || []);
+  
+        console.log("API Response:", response.data.applications);
+        setApplications(response.data.applications);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           toast.error("Unauthorized access. Please login again.");
@@ -45,37 +46,29 @@ const MyApplication = () => {
         }
       }
     };
-
+  
     if (isAuthorized) {
       fetchApplications();
     } else {
       navigateTo("/login");
     }
   }, [isAuthorized, user, navigateTo]);
-
-  const deleteApplication = async (id) => {
-    const storedUser = localStorage.getItem("user");
-    const token = storedUser ? JSON.parse(storedUser).token : null;
-
-    if (!token) {
-      toast.error("No token found. Please login again.");
-      return;
-    }
-
+  
+ 
+  const deleteApplication = (id) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/v1/application/delete/${id}`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      toast.success(response.data.message);
-      setApplications((prevApplications) =>
-        prevApplications.filter((application) => application._id !== id)
-      );
+      axios
+        .delete(`http://localhost:8000/api/v1/application/delete/${id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+          setApplications((prevApplication) =>
+            prevApplication.filter((application) => application._id !== id)
+          );
+        });
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred");
+      toast.error(error.response.data.message);
     }
   };
 
@@ -105,8 +98,7 @@ const MyApplication = () => {
               <JobSeekerCard
                 element={element}
                 key={element._id}
-                deleteApplication={deleteApplication}
-                // openModal={openModal}
+                deleteApplication={deleteApplication}  // Ensure this prop is passed
               />
             ))
           )}
@@ -121,22 +113,17 @@ const MyApplication = () => {
               <EmployerCard
                 element={element}
                 key={element._id}
-                // openModal={openModal}
+                deleteApplication={deleteApplication}  // Add this if needed
               />
             ))
           )}
         </div>
       )}
-      {/* {modalOpen && ( */}
-        {/* // <ResumeModal */}
-        {/* //  imageUrl={resumeImageUrl}  */}
-        {/* //  onClose={closeModal} /> */}
-      {/* // )} */}
     </section>
   );
+  
 };
-
-const JobSeekerCard = ({ element, deleteApplication,  }) => (
+const JobSeekerCard = ({ element, deleteApplication }) => (
   <div className="job_seeker_card">
     <div className="detail">
       <p><span>Name:</span> {element.name}</p>
@@ -149,7 +136,6 @@ const JobSeekerCard = ({ element, deleteApplication,  }) => (
       <img
         src={element.resume?.url || ""}
         alt="resume"
-        // onClick={() => openModal(element.resume?.url || "")}
       />
     </div>
     <div className="btn_area">
@@ -157,8 +143,16 @@ const JobSeekerCard = ({ element, deleteApplication,  }) => (
     </div>
   </div>
 );
+// const JobSeekerCard = ({ element, deleteApplication }) => {
+//   console.log("deleteApplication function:", deleteApplication);
+//   return (
+//     <div className="job_seeker_card">
+//       {/* Render content */}
+//     </div>
+//   );
+// };
 
-const EmployerCard = ({ element, openModal }) => (
+const EmployerCard = ({ element,deleteApplication}) => (
   <div className="job_seeker_card">
     <div className="detail">
       <p><span>Name:</span> {element.name}</p>
@@ -168,11 +162,14 @@ const EmployerCard = ({ element, openModal }) => (
       <p><span>CoverLetter:</span> {element.coverLetter}</p>
     </div>
     <div className="resume">
-      <img
-        src={element.resume?.url || ""}
-        alt="resume"
-        onClick={() => openModal(element.resume?.url || "")}
-      />
+      {/* <img */}
+        {/* // src={element.resume?.url || ""} */}
+        {/* // alt="resume" */}
+        {/* // onClick={() => openModal(element.resume?.url || "")} */}
+      {/* /> */}
+    </div>
+    <div className="btn_area">
+      <button onClick={() => deleteApplication()}>Delete Application</button>
     </div>
   </div>
 );

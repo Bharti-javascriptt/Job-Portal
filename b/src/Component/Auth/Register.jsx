@@ -29,7 +29,7 @@ const Register = () => {
       );
 
       // Store the user data in localStorage
-      localStorage.setItem("user", JSON.stringify(data));
+      // localStorage.setItem("user", JSON.stringify(data));
 
       toast.success(data.message);
       setName("");

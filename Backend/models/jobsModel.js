@@ -68,7 +68,7 @@ const jobSchema =new mongoose.Schema({
     createdBy:{
             type:mongoose.Schema.Types.ObjectID,
             reference:"User",
-            // required:true
+            required:true
         }},
         
   {timestamps:true}
@@ -77,5 +77,3 @@ export  default mongoose.model ('Job', jobSchema)
 
   
 
-
-// export const Job=mongoose.model("Job",jobSchema)

@@ -1,13 +1,12 @@
 import jobseekerModel from "../models/jobseekerModel.js"
-// import cloudinary from 'cloudinary'
+
 import jobsModel from "../models/jobsModel.js";
 import mongoose from "mongoose"
+import { uploadFile } from "../middleware/uploadmiddleware.js";
+
 export const employergetAllApplication=async(req,res,next)=>{
-
-  
-    const {role}=req.user;
-  
-
+   const {role}=req.user;
+   console.log(req.user)
     if(role==='Job seeker'){
         return next("Job seeker is not allowed to access this page ")
     }
@@ -22,13 +21,15 @@ export const employergetAllApplication=async(req,res,next)=>{
 
 export const jobseekergetAllApplication=async(req,res,next)=>{
     const {role}=req.user;
-  
 
     if(role==='Employer'){
         return next("Job seeker is not allowed to access this page ")
     }
     const {_id}=req.user;
+    console.log(_id)
+
     const applications= await jobseekerModel.find({'applicantID.user':_id});
+    console.log(applications)
     res.status(200).json({
         success:true,
         applications
@@ -36,117 +37,183 @@ export const jobseekergetAllApplication=async(req,res,next)=>{
 };
 
 
+// ??? DElete application
 
 
-export const jobseekerDeleteApplication=async(req,res,next)=>{
-    const {role}=req.user;
-  
+export const jobseekerDeleteApplication = async (req, res, next) => {
+  const { role } = req.user;
+  if (role === "Employer") {
+      return next("Employer not allowed to access this resource.");
+  }
 
-    if(role==='Employer'){
-        return next("Job seeker is not allowed to access this page ")
-    }
-    const {_id}=req.params;
-    const application= await jobseekerModel.findById(id);
-    if(!application){
-        return next('oops application not found')
-    }
-    await application.deleteOne();
+  const id = 'valid_id_here'; // Replace with a valid ID for testing
+  console.log('Static ID used for testing:', id);
 
-    res.status(200).json({
-        success:true,
-        message:'application deleted '
-    })
+  try {
+      const application = await jobseekerModel.findById(id);
+      if (!application) {
+          return res.status(404).json({
+              success: false,
+              message: "Application not found!"
+          });
+      }
+      await application.deleteOne();
+      res.status(200).json({
+          success: true,
+          message: "Application Deleted!",
+      });
+  } catch (error) {
+      console.error('Server Error:', error);
+      res.status(500).json({
+          success: false,
+          message: 'An error occurred on the server'
+      });
+  }
 };
-
-
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 post resume here 
 
 
-// cloudinary.v2.config({
-//   cloud_name: process.env.CLOUDINARY_CLIENT_NAME,
-//   api_key: process.env.CLOUDINARY_CLIENT_API,
-//   api_secret: process.env.CLOUDINARY_CLIENT_SECRET,
-// });
+
+
+
+// export const postApplication = async (req, res, next) => {
+//   const { role } = req.user;
+
+//   // Check if the user is a job seeker
+//   if (role === "Employer") {
+//     return next("Employer not allowed to access this resource.");
+//   }
+
+  
+// // //!!!impage upload
+
+
+
+
+
+//   try {
+//     // Extract data from request body
+//     const { name, email, coverLetter, phone, address, jobId } = req.body;
+
+//     // Validate jobId
+//     if (!jobId) {
+//       return next("Job ID is required.");
+//     }
+
+//     // Check if the job exists
+//     const jobDetails = await jobsModel.findById(jobId);
+//     if (!jobDetails) {
+//       return next("Job not found.");
+//     }
+
+//     // Construct applicantID and employerID
+//     const applicantID = { user: req.user._id, role: "Job seeker" };
+//     const employerID = { user: jobDetails.createdBy, role: "Employer" };
+
+//     // Validate all required fields
+//     if (!name || !email || !coverLetter || !phone || !address || !applicantID || !employerID) {
+//       return next("Please fill all fields.");
+//     }
+
+//     // Create a new application
+//     const application = await jobseekerModel.create({
+//       name,
+//       email,
+//       coverLetter,
+//       phone,
+//       address,
+//       applicantID,
+//       employerID,
+//     });
+
+    
+
+//     // Respond with success
+//     res.status(200).json({
+//       success: true,
+//       message: "Application Submitted!",
+//       application,
+//     });
+//   } catch (error) {
+//     console.error("Error in postApplication:", error);
+//     return next("Failed to submit application.");
+//   }
+// };  
+
 
 
 export const postApplication = async (req, res, next) => {
   const { role } = req.user;
 
   // Check if the user is a job seeker
-  if (role === "Employer") {
-    return next("Employer not allowed to access this resource.");
+  if (role === 'Employer') {
+    return next('Employer not allowed to access this resource.');
   }
-// //!!!impage upload
-//   if (!req.files || Object.keys(req.files).length === 0) {
-//     return next("Resume File Required!");
-//   }
 
-//   const { resume } = req.files;
-//   const allowedFormats = ["image/png", "image/jpeg", "image/webp"];
-//   if (!allowedFormats.includes(resume.mimetype)) {
-//     return next(
-//       "Invalid file type. Please upload a PNG file."
-//     );
-//   }
-//   const cloudinaryResponse = await cloudinary.uploader.upload(
-//     resume.tempFilePath
-//   );
-
-//   if (!cloudinaryResponse || cloudinaryResponse.error) {
-//     console.error(
-//       "Cloudinary Error:",
-//       cloudinaryResponse.error || "Unknown Cloudinary error"
-//     );
-//     return next("Failed to upload Resume to Cloudinary");
-//   }
-
-  try {
-    // Extract data from request body
-    const { name, email, coverLetter, phone, address, jobId } = req.body;
-
-    // Validate jobId
-    if (!jobId) {
-      return next("Job ID is required.");
+  // Use multer middleware to handle file upload
+  uploadFile(req, res, async (err) => {
+    if (err) {
+      console.error('Multer Error:', err); // Log the error
+      return next('File upload failed.');
     }
+  
+  
+    // Proceed with application creation...
 
-    // Check if the job exists
-    const jobDetails = await jobsModel.findById(jobId);
-    if (!jobDetails) {
-      return next("Job not found.");
+  
+
+    try {
+      // Extract data from request body
+      const { name, email, coverLetter, phone, address,  jobId} = req.body;
+
+      // Validate jobId
+      if (!jobId) {
+        return next('Job ID is required.');
+      }
+
+      // Check if the job exists
+      const jobDetails = await jobsModel.findById(jobId);
+      if (!jobDetails) {
+        return next('Job not found.');
+      }
+
+      // Construct applicantID and employerID
+      const applicantID = { user: req.user._id, role: 'Job seeker' };
+      const employerID = { user: jobDetails.createdBy, role: 'Employer' };
+
+      // Validate all required fields
+      if (!name || !email || !coverLetter || !phone || !address  ) {
+        return next('Please fill all fields.');
+      }
+
+      // Create a new application
+      const application = await jobseekerModel.create({
+        name,
+        email,
+        coverLetter,
+        phone,
+        address,
+        resume: req.file ? {
+          img_pdf_name: req.file.filename, // फाइल का नाम GridFS के लिए
+          url: `/uploads/${req.file.filename}`, // अपलोड की गई फाइल का URL
+        } : undefined,
+        applicantID,
+        employerID,
+      
+      });
+          console.log('Uploaded file:', req.file); // Log the uploaded file info
+
+
+      // Respond with success
+      res.status(200).json({
+        success: true,
+        message: 'Application Submitted!',
+        application
+      });
+    } catch (error) {
+      console.error('Error in postApplication:', error);
+      return next('Failed to submit application.');
     }
-
-    // Construct applicantID and employerID
-    const applicantID = { user: req.user._id, role: "Job seeker" };
-    const employerID = { user: jobDetails.createdBy, role: "Employer" };
-
-    // Validate all required fields
-    if (!name || !email || !coverLetter || !phone || !address || !applicantID || !employerID) {
-      return next("Please fill all fields.");
-    }
-
-    // Create a new application
-    const application = await jobseekerModel.create({
-      name,
-      email,
-      coverLetter,
-      phone,
-      address,
-      applicantID,
-      employerID,
-    });
-
-    console.log("aad")
-
-    // Respond with success
-    res.status(200).json({
-      success: true,
-      message: "Application Submitted!",
-      application,
-    });
-  } catch (error) {
-    console.error("Error in postApplication:", error);
-    return next("Failed to submit application.");
-  }
-};  
-
+  });
+};

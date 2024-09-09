@@ -6,7 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { Context } from "../../index.js";
 import { useNavigate } from "react-router-dom";
 
-const MyJobs = () => {
+const MyJob = () => {
   const [myJobs, setMyJobs] = useState([]);
   const [editingMode, setEditingMode] = useState(null);
   const { isAuthorized, user } = useContext(Context);
@@ -22,21 +22,28 @@ const MyJobs = () => {
     const fetchJobs = async () => {
       const storedUser = localStorage.getItem("user");
       const token = storedUser ? JSON.parse(storedUser).token : null;
-      // console.log();;ttol
-      console.log(token);
-  
+
       if (!token) {
         toast.error("No token found. Please login again.");
         return;
       }
+
       try {
-       
         const { data } = await axios.get(
-          "http://localhost:8000/api/v1/job/getall",
-          { withCredentials: true }
+          "http://localhost:8000/api/v1/job/getmyjob",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        
         );
-        setMyJobs(data.job);
+        console.log("API Response Data:", data); // Log the API response
+        setMyJobs(data.myjob); // Ensure this matches the response structure
       } catch (error) {
+        console.error("Fetch error:", error); // Log errors
         toast.error(error.response?.data?.message || 'Failed to fetch jobs');
         setMyJobs([]);
       }
@@ -56,21 +63,21 @@ const MyJobs = () => {
   };
 
   const handleUpdateJob = async (jobId) => {
-    const updatedJob = myJobs.find((job) => job._id === jobId);
-    console.log("Updated Job Data:", updatedJob);
-  
+    // const updatedJob = myJobs.find((job) => job._id === jobId);
+    // console.log("Updated Job Data:", updatedJob); // Log the updated job data
+
     const storedUser = localStorage.getItem("user");
     const token = storedUser ? JSON.parse(storedUser).token : null;
-  
+
     if (!token) {
       toast.error("No token found. Please login again.");
       return;
     }
-  
+
     try {
       const res = await axios.patch(
         `http://localhost:8000/api/v1/job/update/${jobId}`,
-        updatedJob,
+      
         {
           headers: {
             "Content-Type": "application/json",
@@ -81,18 +88,18 @@ const MyJobs = () => {
       );
       toast.success(res.data.message);
       setEditingMode(null);
+      // setMyJobs(res.job); // Ensure this matches the response structure
+
     } catch (error) {
-      console.error("Update failed:", error.response || error.message);
+      console.error("Update failed:", error); // Log errors
       toast.error(error.response?.data?.message || "Failed to update the job");
     }
   };
-  
+
   // Function For Deleting Job
   const handleDeleteJob = async (jobId) => {
     const storedUser = localStorage.getItem("user");
     const token = storedUser ? JSON.parse(storedUser).token : null;
-    // console.log();;ttol
-    console.log(token);
 
     if (!token) {
       toast.error("No token found. Please login again.");
@@ -113,6 +120,7 @@ const MyJobs = () => {
       toast.success(data.message);
       setMyJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
     } catch (error) {
+      console.error("Delete failed:", error); // Log errors
       toast.error(error.response?.data?.message || 'Failed to delete job');
     }
   };
@@ -143,11 +151,10 @@ const MyJobs = () => {
                         disabled={editingMode !== element._id}
                         value={element.position}
                         onChange={(e) =>
-                          handleInputChange(element._id, "title", e.target.value)
+                          handleInputChange(element._id, "position", e.target.value)
                         }
                       />
                     </div>
-                    {/* Repeat similar blocks for other fields */}
                     <div>
                       <span>Category:</span>
                       <select
@@ -220,4 +227,4 @@ const MyJobs = () => {
   );
 };
 
-export default MyJobs;
+export default MyJob;

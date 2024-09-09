@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
-    import validator from "validator";
-    import bcrypt from 'bcryptjs'
-    import JWT from 'jsonwebtoken';
+import validator from "validator";
+import bcrypt from 'bcryptjs'
+import JWT from 'jsonwebtoken';
 //schema
 const userSchema = new mongoose.Schema({
 name:{
     type:String,
-    required:[true, "name is required "]
+    required:[true, "Name is required "]
 },
 lastName: {
     type:String
@@ -31,16 +31,16 @@ role:{
     required:[true, "please provide your role"],
     enum:['Job seeker', 'Employer']
 },
-// location:{
-//     type:String,
-//     default:'India'
-// },
+
 },
 {timestamps:true}
 );
+
+
+
 //!!middleware   bcrypt  pasword hashing 
 userSchema.pre('save', async function(next){
-    if(!this.isModified){
+    if(!this.isModified("password")){
         next();
     }
     const salt =await bcrypt.genSalt(10);
