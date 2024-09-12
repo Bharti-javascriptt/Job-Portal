@@ -12,7 +12,7 @@
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
-    const { isAuthorized, setIsAuthorized ,setUser} = useContext(Context);
+    const { isAuthorized, setIsAuthorized } = useContext(Context);
     console.log(isAuthorized)
 
     const handleLogin = async (e) => {
@@ -37,8 +37,9 @@
         setPassword("");
         setRole("");
         setIsAuthorized(true);
-        setUser(data) //yaha per user variable meekobjectstore hoga user.user.role user.token
-        console.log(data.token)
+        // setUser(data) 
+        //yaha per user variable meekobjectstore hoga user.user.role user.token
+      
         
         console.log(data)
       } catch (error) {

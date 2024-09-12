@@ -2,15 +2,9 @@ import JWT from 'jsonwebtoken';
 import userModel from '../models/userModel.js';
 
 const auth = async (req, res, next) => {
-    // const authHeader = req.headers.authorization;
     const token= req.cookies.token; // Or wherever your token is stored
 
 
-    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    //     return res.status(401).json({ error: 'Authorization header missing or incorrect format' });
-    // }
-
-    // const token = authHeader.split(' ')[1];
 
     if (!token) {
 
@@ -44,4 +38,12 @@ export default auth;
 
 
 
+// !!! is code ko tab put karenge jab hume header se token bhejna ho aur 
+// !!! cookies me token sotre nahi karna hao tab 
+    // const authHeader = req.headers.authorization;
 
+    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //     return res.status(401).json({ error: 'Authorization header missing or incorrect format' });
+    // }
+
+    // const token = authHeader.split(' ')[1];

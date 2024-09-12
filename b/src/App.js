@@ -18,31 +18,29 @@ import PostJob from "./Component/Job/PostJob";
 import NotFound from "./Component/NotFound/NotFound";
 import MyJob from "./Component/Job/MyJob";
 const App = () => {
-  const { setIsAuthorized, setUser,user, } = useContext(Context);
+  const { isAuthorized,setIsAuthorized, setUser, } = useContext(Context);
   
-  console.log(user.token)
+
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
           "http://localhost:8000/api/v1/reg/getuser",
-          {  headers: {
-            Authorization: `Bearer ${user.token}`,  // 'Bearer' स्कीम के साथ टोकन भेजना
-          },
+          { 
           withCredentials: true  // अगर आपको कुकीज़ भी भेजनी हैं
         }
         );
         console.log("kkjhjk")
-
-        setUser(response.data);
+        setUser(response.data.user);
+        console.log(response.data.user.role)
         setIsAuthorized(true);
       } catch (error) {
         setIsAuthorized(false);
       }
     };
     fetchUser();
-  },[]);
+  },[isAuthorized,setIsAuthorized,setUser]);
 
   return (
     <>
