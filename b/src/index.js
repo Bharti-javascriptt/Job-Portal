@@ -14,8 +14,7 @@ const AppWrapper = () => {
   console.log(user)
   // yaha per user variable me setuser ke value store hoge uuser fetch karne ke lyie 
   //hum user.user.role, user.token, user.success
-
-  return (
+return (
     <Context.Provider
       value={{
         isAuthorized,

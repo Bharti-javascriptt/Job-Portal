@@ -12,6 +12,8 @@ const Navbar = () => {
   console.log(isAuthorized)
   console.log(`authorized value:: ${isAuthorized}`)
 
+  
+
   const handleLogout = async () => {
     try {
       const response = await axios.get(

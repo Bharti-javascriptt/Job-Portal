@@ -6,13 +6,11 @@ import { RxCross2 } from "react-icons/rx";
 import { Context } from "../../index.js";
 import { useNavigate } from "react-router-dom";
 
-const MyJob = () => {
+function MyJob() {
   const [myJobs, setMyJobs] = useState([]);
   const [editingMode, setEditingMode] = useState(null);
   const { isAuthorized, user } = useContext(Context);
   const navigateTo = useNavigate();
-
-  // Fetching all jobs
   useEffect(() => {
     if (!isAuthorized) {
       navigateTo("/");
@@ -20,28 +18,21 @@ const MyJob = () => {
     }
 
     const fetchJobs = async () => {
-      const storedUser = localStorage.getItem("user");
-      const token = storedUser ? JSON.parse(storedUser).token : null;
-
-      if (!token) {
-        toast.error("No token found. Please login again.");
-        return;
-      }
-
       try {
         const { data } = await axios.get(
           "http://localhost:8000/api/v1/job/getmyjob",
           {
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`,
+              // "Authorization": `Bearer ${token}`,
             },
             withCredentials: true,
           }
-        
+
         );
-        console.log("API Response Data:", data); // Log the API response
-        setMyJobs(data.myjob); // Ensure this matches the response structure
+        console.log("API Response Data:", data.myjob);
+        setMyJobs(data.myjob);
+
       } catch (error) {
         console.error("Fetch error:", error); // Log errors
         toast.error(error.response?.data?.message || 'Failed to fetch jobs');
@@ -63,32 +54,19 @@ const MyJob = () => {
   };
 
   const handleUpdateJob = async (jobId) => {
-    // const updatedJob = myJobs.find((job) => job._id === jobId);
-    // console.log("Updated Job Data:", updatedJob); // Log the updated job data
-
-    const storedUser = localStorage.getItem("user");
-    const token = storedUser ? JSON.parse(storedUser).token : null;
-
-    if (!token) {
-      toast.error("No token found. Please login again.");
-      return;
-    }
-
     try {
       const res = await axios.patch(
         `http://localhost:8000/api/v1/job/update/${jobId}`,
-      
+
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
           },
           withCredentials: true,
         }
       );
       toast.success(res.data.message);
       setEditingMode(null);
-      // setMyJobs(res.job); // Ensure this matches the response structure
 
     } catch (error) {
       console.error("Update failed:", error); // Log errors
@@ -96,15 +74,9 @@ const MyJob = () => {
     }
   };
 
-  // Function For Deleting Job
+  //?????? Function For Deleting Job
   const handleDeleteJob = async (jobId) => {
-    const storedUser = localStorage.getItem("user");
-    const token = storedUser ? JSON.parse(storedUser).token : null;
 
-    if (!token) {
-      toast.error("No token found. Please login again.");
-      return;
-    }
 
     try {
       const { data } = await axios.delete(
@@ -112,7 +84,6 @@ const MyJob = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
           },
           withCredentials: true,
         }
@@ -125,12 +96,9 @@ const MyJob = () => {
     }
   };
 
-  // Function to handle input changes
   const handleInputChange = (jobId, field, value) => {
-    setMyJobs((prevJobs) =>
-      prevJobs.map((job) =>
-        job._id === jobId ? { ...job, [field]: value } : job
-      )
+    setMyJobs((prevJobs) => prevJobs.map((job) => job._id === jobId ? { ...job, [field]: value } : job
+    )
     );
   };
 
@@ -150,18 +118,13 @@ const MyJob = () => {
                         type="text"
                         disabled={editingMode !== element._id}
                         value={element.position}
-                        onChange={(e) =>
-                          handleInputChange(element._id, "position", e.target.value)
-                        }
-                      />
+                        onChange={(e) => handleInputChange(element._id, "position", e.target.value)} />
                     </div>
                     <div>
                       <span>Category:</span>
                       <select
                         value={element.category}
-                        onChange={(e) =>
-                          handleInputChange(element._id, "category", e.target.value)
-                        }
+                        onChange={(e) => handleInputChange(element._id, "category", e.target.value)}
                         disabled={editingMode !== element._id}
                       >
                         <option value="Graphics & Design">Graphics & Design</option>
@@ -176,10 +139,7 @@ const MyJob = () => {
                         rows={5}
                         value={element.description}
                         disabled={editingMode !== element._id}
-                        onChange={(e) =>
-                          handleInputChange(element._id, "description", e.target.value)
-                        }
-                      />
+                        onChange={(e) => handleInputChange(element._id, "description", e.target.value)} />
                     </div>
                   </div>
                 </div>
@@ -225,6 +185,6 @@ const MyJob = () => {
       </div>
     </div>
   );
-};
+}
 
 export default MyJob;

@@ -6,7 +6,7 @@
   import axios from "axios";
   import toast from "react-hot-toast";
   import { Context } from "../../index.js";
-  // import  {banner} from '../../img/banner'
+
 
   const Login = () => {
     const [email, setEmail] = useState("");
@@ -23,8 +23,7 @@
           { email, password, role },
           {
             withCredentials: true,
-
-            headers: {
+             headers: {
               "Content-Type": "application/json",
             },
           }
@@ -50,13 +49,12 @@
     };
     
     if (isAuthorized) {
-      return <Navigate to={"/"} />;
+      return <Navigate to={"/"}/>;
     }
 
     return (
       <div className="x">
-
-        <section className="authPage">
+      <section className="authPage">
           <div className="container">
             <div className="header">
               <img  src="/img/logo.jpg" alt="logo" />

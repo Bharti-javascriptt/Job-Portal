@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../index.js";
-import toast from 'react-hot-toast'
+// import toast from 'react-hot-toast'
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);
@@ -10,21 +10,15 @@ const Jobs = () => {
   const navigateTo = useNavigate();
   useEffect(() => {
     try {
-      const storedUser = localStorage.getItem("user");
-      const token = storedUser ? JSON.parse(storedUser).token : null;
-      // console.log();;ttol
-      console.log(token);
-  
-      if (!token) {
-        toast.error("No token found. Please login again.");
-        return;
-      }
+      
       axios
         .get("http://localhost:8000/api/v1/job/getall", {
           withCredentials: true,
         })
         .then((res) => {
           setJobs(res.data);
+          console.log(res.data)
+          console.log(res.data.job[0]._id)
         });
     } catch (error) {
       console.log(error);
@@ -39,8 +33,7 @@ const Jobs = () => {
       <div className="container">
         <h1>ALL AVAILABLE JOBS</h1>
         <div className="banner">
-          {jobs.job&&
-            jobs.job.map((element) => {
+          {jobs.job&& jobs.job.map((element) => {
               return (
                 <div className="card" key={element._id}>
                   <p>{element.position}</p>

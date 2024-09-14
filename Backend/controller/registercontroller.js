@@ -23,8 +23,6 @@
    {
       next('provide the role ')
    }
-
-   
    const existinguser=await userModel.findOne({email})
    if(existinguser){
    next("already register please login");
@@ -48,10 +46,10 @@
 
    // const token= sendToken()
    res.status(201)
-   .cookie("token", user, options)
+   .cookie("token", token, options)
    .send({
       success:true,
-      message:'User registered  successfully',
+      message:'User registered Successfully',
       user,
       token,
    

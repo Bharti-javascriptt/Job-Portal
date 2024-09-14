@@ -21,27 +21,6 @@ const PostJob = () => {
   const handleJobPost = async (e) => {
     e.preventDefault();
 
-    // Reset the salary fields based on salary type
-    if (salaryType === "Fixed Salary") {
-        setSalaryFrom("");
-        setSalaryTo(""); // Clear range fields if fixed salary is selected
-    } else if (salaryType === "Ranged Salary") {
-        setFixedSalary(""); // Clear fixed salary field if range salary is selected
-    } else {
-        setSalaryFrom("");
-        setSalaryTo("");
-        setFixedSalary(""); // Clear all salary fields if no valid salary type is selected
-    }
-
-    // Retrieve the token from localStorage
-    const storedUser = localStorage.getItem("user");
-    const token = storedUser ? JSON.parse(storedUser).token : null;
-    
-    if (!token) {
-        toast.error("No token found. Please login again.");
-        return;
-    }
-    
     try {
         // Making the POST request with the correct headers and payload
         const response = await axios.post(
@@ -69,11 +48,10 @@ const PostJob = () => {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`, // Corrected: Properly set the Authorization header
+                  
                 },
                 withCredentials: true,
-                // "body":JSON.stringify({position,description,company,country,city,location,sa})
-            }
+                }
         );
 
         // If the job post is successful, clear the form and display a success message
@@ -87,10 +65,28 @@ const PostJob = () => {
         setCountry("");
         setCity("");
         setLocation("");
+
+        
+    // Reset the salary fields based on salary type
+    if (salaryType === "Fixed Salary") {
+      setSalaryFrom("");
+      setSalaryTo(""); // Clear range fields if fixed salary is selected
+  } else if (salaryType === "Ranged Salary") {
+      setFixedSalary(""); // Clear fixed salary field if range salary is selected
+  } else {
+      setSalaryFrom("");
+      setSalaryTo("");
+      setFixedSalary(""); // Clear all salary fields if no valid salary type is selected
+  }
+
+
     } catch (error) {
         console.error("Job post error:", error); // Log the full error
         const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
         toast.error(errorMessage);
+                console.error("Job post error:", error); // Log the full error
+
+
     }
 };
 
@@ -104,19 +100,20 @@ const PostJob = () => {
       <div className="job_post page">
         <div className="container">
           <h3>POST NEW JOB</h3>
-          <form onSubmit={handleJobPost}>
+
+          <form>
             <div className="wrapper">
               <input
                 type="text"
-                value={position}
-                onChange={(e) => setposition(e.target.value)}
-                placeholder="Job Position"
-              />
-              <select
                 value={company}
                 onChange={(e) => setcompany(e.target.value)}
+                placeholder="Company"
+              />
+              <select
+                value={position}
+                onChange={(e) => setposition(e.target.value)}
               >
-                <option value="">Select company</option>
+                <option value="">Select Position</option>
                 <option value="Graphics & Design">Graphics & Design</option>
                 <option value="Mobile App Development">
                   Mobile App Development
@@ -136,11 +133,13 @@ const PostJob = () => {
                   MEAN STACK Development
                 </option>
                 <option value="MEVN Stack Development">
-                  MEVN STACK Development
+                  MERN STACK Development
                 </option>
                 <option value="Data Entry Operator">Data Entry Operator</option>
               </select>
             </div>
+
+
             <div className="wrapper">
               <input
                 type="text"
@@ -148,6 +147,8 @@ const PostJob = () => {
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="Country"
               />
+
+
               <input
                 type="text"
                 value={city}
@@ -161,11 +162,11 @@ const PostJob = () => {
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Location"
             />
+
             <div className="salary_wrapper">
               <select
                 value={salaryType}
-                onChange={(e) => setSalaryType(e.target.value)}
-              >
+                onChange={(e) => setSalaryType(e.target.value)}>
                 <option value="default">Select Salary Type</option>
                 <option value="Fixed Salary">Fixed Salary</option>
                 <option value="Ranged Salary">Ranged Salary</option>
@@ -204,7 +205,7 @@ const PostJob = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Job Description"
             />
-            <button type="submit">Create Job</button>
+            <button onSubmit={ handleJobPost} type="submit">Create Job</button>
           </form>
         </div>
       </div>

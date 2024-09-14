@@ -12,13 +12,11 @@ const router =express.Router()
 
 router.post ('/post', auth, createJobController)
 router.get ('/getall', getAlljob  )
-
 router.get('/getmyjob',auth, getmyjob)
 router.patch('/update/:id', auth, updateJobcontroller)
-// 
 router.delete('/delete-job/:id', auth, deleteJobController)
 router.get('/job-stats', auth, jobsStatsController)
 
-router.get('/getall/:id', getsinglejob)
+router.get('/jobdetail/:id', getsinglejob)
 // 
 export default router;

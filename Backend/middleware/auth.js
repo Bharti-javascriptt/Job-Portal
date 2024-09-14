@@ -4,10 +4,9 @@ import userModel from '../models/userModel.js';
 const auth = async (req, res, next) => {
     const token= req.cookies.token; // Or wherever your token is stored
 
-
+   console.log(`this is the token which i get ${token}`)
 
     if (!token) {
-
         console.log(!token)
         return res.status(401).json({ error: 'Token is missing or empty' });
     }

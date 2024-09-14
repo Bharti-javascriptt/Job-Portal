@@ -3,6 +3,14 @@
 import express from 'express';
 const  app= express();
 import "express-async-errors"
+import cookieParser from 'cookie-parser';
+
+// Make sure cookie-parser middleware is used
+app.use(cookieParser());
+
+// Example to log cookies
+// console.log('Cookies:', req.cookies);
+
 
 
 app.use('/uploads', express.static('uploads'))
@@ -10,8 +18,7 @@ app.use('/uploads', express.static('uploads'))
 //!!!!env config
 import dotenv from 'dotenv'
 dotenv.config()
-import cookieParser from 'cookie-parser';
-app.use(cookieParser())
+
 
 
 //!!!! connect database
@@ -26,9 +33,6 @@ app.use(cors({
     methods:['Get','post', 'put', 'delete'],
     credentials:true
 }));
-
-
-
 import morgan from 'morgan';
 app.use(morgan("dev"));
 
@@ -56,10 +60,6 @@ import registerroutes from './routes/registerroute.js'
 import jobsroute from './routes/jobsroute.js'
 import errormiddleware from './middleware/errormiddleware.js';
 import applicationroute from './routes/applicationroute.js' 
-
-
-
-
 
 //!!!!    routing 
 app.use('/api/v1/reg', registerroutes)  // this is for registration login logout 

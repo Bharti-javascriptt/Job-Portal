@@ -14,14 +14,14 @@ const MyApplication = () => {
 
   useEffect(() => {
     const fetchApplications = async () => {
-      const storedUser = localStorage.getItem("user");
-      const token = storedUser ? JSON.parse(storedUser).token : null;
+      // const storedUser = localStorage.getItem("user");
+      // const token = storedUser ? JSON.parse(storedUser).token : null;
   
-      if (!token) {
-        toast.error("No token found. Please login again.");
-        navigateTo("/login");
-        return;
-      }
+      // if (!token) {
+        // toast.error("No token found. Please login again.");
+        // navigateTo("/login");
+        // return;
+      // }
   
       try {
         const url = user === "Employer"
@@ -30,9 +30,7 @@ const MyApplication = () => {
   
         const response = await axios.get(url, {
           withCredentials: true,
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
+        
         });
   
         console.log("API Response:", response.data.applications);

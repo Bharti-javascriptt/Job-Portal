@@ -26,13 +26,10 @@ const Application = () => {
     formData.append("coverLetter", coverLetter);
     formData.append("jobId", id);
 
-    const storedUser = localStorage.getItem("user");
-    const token = storedUser ? JSON.parse(storedUser).token : null;
+    // const storedUser = localStorage.getItem("user");
+    // const token = storedUser ? JSON.parse(storedUser).token : null;
 
-    if (!token) {
-      toast.error("No token found. Please login again.");
-      return;
-    }
+  
 
     try {
       const { data } = await axios.post(
@@ -42,7 +39,7 @@ const Application = () => {
           withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // Add token here
+            // Authorization: `Bearer ${token}`, // Add token here
           },
         }
       );

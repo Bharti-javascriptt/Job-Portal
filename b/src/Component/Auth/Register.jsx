@@ -10,9 +10,9 @@ const Register = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [redirectToHome, setRedirectToHome] = useState(false);
+  // const [redirectToHome, setRedirectToHome] = useState(false);
 
-  const { setIsAuthorized } = useContext(Context);
+  const { isAuthorized, setIsAuthorized } = useContext(Context);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -27,10 +27,7 @@ const Register = () => {
           withCredentials: true,
         }
       );
-
-      // Store the user data in localStorage
-      // localStorage.setItem("user", JSON.stringify(data));
-
+      console.log(data)
       toast.success(data.message);
       setName("");
       setEmail("");
@@ -38,9 +35,7 @@ const Register = () => {
       setPhone("");
       setRole("");
       setIsAuthorized(true);
-
-      // Redirect to home page
-      setRedirectToHome(true);
+      // setRedirectToHome(true);
     } catch (error) {
       console.error('Error during registration:', error); // Log the full error for debugging
       const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
@@ -48,8 +43,8 @@ const Register = () => {
     }
   };
 
-  if (redirectToHome) {
-    return <Navigate to="/" />;
+  if (isAuthorized) {
+    return <Navigate to={"/"}/>;
   }
 
   return (
@@ -59,7 +54,7 @@ const Register = () => {
           <img src="/img/logo.jpg" alt="logo" />
           <h3>Create a new account</h3>
         </div>
-        <form onSubmit={handleRegister}>
+        <form>
           <div className="inputTag">
             <label>Register As</label>
             <div>
@@ -114,10 +109,10 @@ const Register = () => {
               />
             </div>
           </div>
-          <button type="submit">
+          <button onClick={handleRegister}>
             Register
           </button>
-          <Link to="/login">Login Now</Link>
+          <Link to="/">Login Now</Link>
         </form>
       </div>
       <div className="banner">

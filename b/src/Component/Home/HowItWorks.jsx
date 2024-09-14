@@ -15,7 +15,8 @@ const HowItWorks = () => {
               <FaUserPlus />
               <p>Create Account</p>
               <p>
-              Create a Job: Log in as an employer, navigate to the "Create Job" section, and fill out the job details, including title, description, requirements, and location.
+              Create a Job: Log in as an employer, 
+              navigate to the "Create Job" section, and fill out the job details, including title, description, requirements, and location.
 
 
               </p>

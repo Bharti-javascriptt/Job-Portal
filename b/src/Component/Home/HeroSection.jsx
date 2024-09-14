@@ -33,15 +33,17 @@ const HeroSection = () => {
       <div className="heroSection">
         <div className="container">
           <div className="title">
-            <h1>Find a job that suits</h1>
+            <h1>Find a job </h1>
             <h1>your interests and skills</h1>
             <p>
             
-            For Employers:Use the portal to post jobs, track applications, and communicate with candidates in real-time.
+            For Employers:Use the portal to post jobs, track applications,
+             and communicate with candidates in real-time.For Job Seekers:
+              Find tailored job opportunities, follow clear application steps,
+               and track your application status.
 
-For Job Seekers: Find tailored job opportunities, follow clear application steps, and track your application status.
-
-Key Features: Secure logins, personalized dashboards, and advanced search filters for an efficient job search experience.
+                Key Features: Secure logins, personalized dashboards, and 
+                advanced search filters for an efficient job search experience.
 
 
             </p>

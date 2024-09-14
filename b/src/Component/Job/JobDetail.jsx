@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams ,useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { Context } from '../../index.js';
 
 const JobDetails = () => {
@@ -11,6 +10,8 @@ const JobDetails = () => {
   const [error, setError] = useState(null); // State to handle errors
   const navigateTo = useNavigate();
   const { isAuthorized, user } = useContext(Context);
+   console.log(user.role)
+   console.log({user})
 
   useEffect(() => {
     if (!id) {
@@ -21,7 +22,7 @@ const JobDetails = () => {
 
     const fetchJobDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/v1/job/getall/${id}`, {
+        const response = await axios.get(`http://localhost:8000/api/v1/job/jobdetail/${id}`, {
           withCredentials: true,
         });
         if (response.data.success) {
@@ -89,10 +90,10 @@ const JobDetails = () => {
             Description: <span>{job.description}</span>
           </p>
           <p>
-            Job Posted On: <span>{job.createdBy}</span>
+            Job Posted On: <span>{job.jobpostedOn}</span>
           </p>
           <p>
-            Salary:{" "}
+            Salary:
             {job.fixedSalary ? (
               <span>{job.fixedSalary}</span>
             ) : (
@@ -101,7 +102,7 @@ const JobDetails = () => {
               </span>
             )}
           </p>
-          {user && user.role !== 'Employer' ? (
+          {user&&user.role !== 'Employer' ? (
             <Link to={`/application/${job._id}`}>Apply Now</Link>
           ) : null}
         </div>
